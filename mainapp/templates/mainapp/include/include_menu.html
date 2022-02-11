@@ -1,0 +1,9 @@
+{% for link in mainapp_list %}
+
+    <li><a href="{% url link.view_name %}"
+    {% if request.resolver_match.url_name == link.view_name %}
+					class="active"
+					{% endif %}
+    >{{ link.link_name }}</a></li>
+
+{% endfor %}
