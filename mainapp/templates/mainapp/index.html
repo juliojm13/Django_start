@@ -38,6 +38,17 @@
 						</div> 
 					</a>
 				</div>
+				{% for product in products %}
+				  <div class="block">
+					<a href="#">
+					  <img src="/media/{{ product.image }}" alt="{{ product.short_desc }}" style="width:270px;height:270px;">
+					  <div class="text">
+						<h4>{{ product.name }}</h4>
+						<p>{{ product.description }}</p>
+					  </div>
+					</a>
+				  </div>
+				{% endfor %}
 				<div class="block">
 					<a href="#"><img src="{% static 'img/product-2.jpg' %}" alt="">
 						<div class="text">

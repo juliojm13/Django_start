@@ -11,12 +11,6 @@
 
 				</ul>
 
-<!--				<ul class="menu">-->
-<!--					<li><a href="/">домой</a></li>-->
-<!--					<li><a href="/products" class="active">продукты</a></li>-->
-<!--					<li><a href="/contact">контакты</a></li>-->
-
-<!--				</ul>-->
 				<a href="#" class="search"></a>
                 <a href="#" class="basket"></a>
 			</div>
@@ -27,7 +21,7 @@
 				<ul class="links-menu">
 					{% for category in products_category%}
 
-					<li><a href="#" {%if category == 'Все' %} class="active" {%endif%}>{{ category }}</a></li>
+					<li><a href="{% url 'products:category' category.id %}">{{ category }}</a></li>
 
 					{% endfor %}
 				</ul>

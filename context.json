@@ -1,5 +1,5 @@
 {
-  "mainapp_list":[{"view_name": "index", "link_name": "домой"}, {"view_name": "products", "link_name": "Продукты"},
+  "mainapp_list":[{"view_name": "index", "link_name": "домой"}, {"view_name": "products:index", "link_name": "Продукты"},
                 {"view_name": "contact", "link_name": "Контакты"}
                 ],
   "products_category": ["Все", "Дом", "Офис", "Модерн"]
