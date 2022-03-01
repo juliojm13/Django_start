@@ -27,6 +27,7 @@ urlpatterns = [
     path('contact/', mainapp_views.contact, name = 'contact'),
     path('admin/', admin.site.urls),
     path('auth/', include('authapp.urls', namespace='auth')),
+    path('cart/', include('cartapp.urls', namespace='cart')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
