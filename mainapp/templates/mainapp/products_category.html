@@ -34,7 +34,7 @@
                     <img src="/media/{{ product.image }}" alt="{{ product.short_desc }}" style="width:470px;height:470px;">
 					<h3 class="big-bold">{{product.short_description}}</h3>
 					<p class="price">{{product.price}}<span>руб</span></p>
-					<a href="{% url 'cart:add_to_cart' product.id %}" class="red-button">
+					<a href="{% url 'cart:adding_product' product.id %}" class="red-button">
 						заказать <i class="fa fa-chevron-right" aria-hidden="true"></i>
 					</a>
 					<div class="description-text">

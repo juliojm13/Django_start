@@ -1,0 +1,57 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+{% block 'content' %}
+	<div class="container">
+		<div class="hero-white">
+			<div class="header clearfix">
+				<a href="/" class="logo"></a>
+				<ul class="menu">
+
+					{% include 'mainapp/include/include_menu.html' %}
+
+				</ul>
+
+				<a href="#" class="search"></a>
+                <a href="#" class="basket"></a>
+			</div>
+		</div>
+
+		<div class="details">
+			<div class="links clearfix">
+				<ul class="links-menu">
+					{% for category in products_category%}
+
+					<li><a href="{% url 'products:category' category.id %}">{{ category }}</a></li>
+
+					{% endfor %}
+					<li><a href="{% url 'products:all' %}">Все</a></li>
+				</ul>
+			</div>
+
+			<div class="details-products">
+				<div class="details-slider">
+					<div class="slider-product">
+						<img src="/media/{{ selected_product.image }}" style="width:450px;height:450px;">
+					</div>
+				</div>
+
+				<div class="description">
+					<h3 class="big-bold">{{selected_product}}</h3>
+					<h3 class="red">горячее предложение</h3>
+					<p class="price"> {{selected_product.price}} <span>руб</span></p>
+					<a href="{% url 'cart:add_to_cart' selected_product.id %}" class="red-button">
+						добавить в корзину <i class="fa fa-chevron-right" aria-hidden="true"></i>
+					</a>
+					<div class="description-text">
+						<p>{{selected_product.short_description}}</p>
+						<p>{{selected_product.description}}.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="clr"></div>
+
+	</div>	
+
+{% endblock %}
