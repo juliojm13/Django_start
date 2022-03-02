@@ -6,6 +6,9 @@
 					{% endif %}
                 {% if request.resolver_match.view_name == 'products:category' and link.link_name == 'Продукты'  %}
 					class="active"
+                {% elif request.resolver_match.view_name == 'products:all' and link.link_name == 'Продукты'  %}
+					class="active"
+
 					{% endif %}
     >{{ link.link_name }}</a></li>
 
@@ -23,4 +26,7 @@
     {% else %}
       <a href="{% url 'auth:login' %}">войти</a>
     {% endif %}
+    <a href="{% url 'cartapp:cart' %}">
+        {% if cart %} ({{cart.0.total_quantity}}: {{cart.0.total_cost}}) {% endif %}
+    </a>
 </li>

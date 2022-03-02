@@ -1,0 +1,11 @@
+{% extends 'cartapp/base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="basket_list">
+    {% include 'cartapp/includes/inc_cart_list.html' %}
+  </div>
+  <button class="btn btn-round">
+    <a href="{% url 'index' %}">на главную</a>
+  </button>
+{% endblock %}

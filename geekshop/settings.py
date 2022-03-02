@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-
+from django.conf import global_settings
 from pathlib import Path
 import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'mainapp',
     'authapp',
+    'cartapp',
 ]
 
 MIDDLEWARE = [
@@ -135,3 +136,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 #auth
 
 AUTH_USER_MODEL = 'authapp.ShopUser'
+
+
+#for @login_required()
+LOGIN_URL = '/auth/login/'
