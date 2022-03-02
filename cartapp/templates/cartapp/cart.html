@@ -1,16 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    Hello! {{request.user}} you have {{cart|length}} products in cart:
-    {% for el in cart %}
-        <li> {{el}} </li>
-    <br>
-    {%endfor%}
+{% extends 'cartapp/base.html' %}
+{% load static %}
 
-<a href="{% url 'index' %}">Home</a>
-</body>
-</html>
+{% block content %}
+  <div class="basket_list">
+    {% include 'cartapp/includes/inc_cart_list.html' %}
+  </div>
+  <button class="btn btn-round">
+    <a href="{% url 'index' %}">на главную</a>
+  </button>
+{% endblock %}
