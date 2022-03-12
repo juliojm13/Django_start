@@ -1074,3 +1074,7 @@ td:first-child {
 .errorlist{
     color: red;
 }
+
+.not_active{
+    opacity: 0.3;
+}
