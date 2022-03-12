@@ -26,7 +26,13 @@
     {% else %}
       <a href="{% url 'auth:login' %}">войти</a>
     {% endif %}
+    {% if user.is_superuser %}
+    <li>
+      <a href="{% url 'admin:users' %}">админка</a>
+    </li>
+    {% endif %}
     <a href="{% url 'cartapp:cart' %}">
-        {% if cart %} ({{cart.0.total_quantity}}: {{cart.0.total_cost}}) {% endif %}
+       Корзина {% if cart %} ({{cart.0.total_quantity}}: {{cart.0.total_cost}}) {% endif %}
     </a>
+
 </li>
