@@ -20,9 +20,9 @@
 			<div class="links clearfix">
 				<ul class="links-menu">
 					{% for category in products_category%}
-
+					{%if category.is_active%}
 					<li><a href="{% url 'products:category' category.id %}">{{ category }}</a></li>
-
+					{%endif%}
 					{% endfor %}
 					<li><a href="{% url 'products:all'  %}">Все</a></li>
 				</ul>

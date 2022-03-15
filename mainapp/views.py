@@ -3,6 +3,7 @@ from datetime import datetime
 import json
 from .models import ProductCategory, Product
 import random
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
 with open('context.json', 'r', encoding='utf-8') as f:
@@ -19,14 +20,14 @@ def get_cart(user):
 
 
 def get_hot_product():
-    products = Product.objects.all()
+    products = Product.objects.all().filter(is_active=True)
 
     return random.choice(products)
 
 
 def get_same_products(hot_product):
     same_products = Product.objects.filter(category=hot_product.category). \
-                        exclude(pk=hot_product.pk)[:3]
+                        exclude(pk=hot_product.pk).filter(is_active=True)[:3]
 
     return same_products
 
@@ -44,7 +45,7 @@ def index(request):
 
 
 def products(request):
-    products_category = ProductCategory.objects.all()
+    products_category = ProductCategory.objects.all().filter(is_active=True)
     cart = get_cart(request.user)
     hot_product = get_hot_product()
     same_products = get_same_products(hot_product)
@@ -69,16 +70,25 @@ def contact(request):
     })
 
 
-def products_category(request, pk=None):
+def products_category(request, pk=None, page=1):
     # import pdb; pdb.set_trace()
     products_category = ProductCategory.objects.all()
     cart = get_cart(request.user)
     if pk is None:
-        products_of_category = Product.objects.all()
+        products_of_category = Product.objects.all().filter(is_active=True)
     else:
-        products_of_category = Product.objects.filter(category_id=pk)
+        products_of_category = Product.objects.filter(category_id=pk, is_active=True)
+
+    paginator = Paginator(products_of_category, 2)
+    # import pdb;pdb.set_trace()
+    try:
+        products_paginator = paginator.page(page)
+    except PageNotAnInteger:
+        products_paginator = paginator.page(1)
+    except EmptyPage:
+        products_paginator = paginator.page(paginator.num_pages)
     return render(request, 'mainapp/products_category.html', context={
-        'products_of_category': products_of_category,
+        'products_of_category': products_paginator,
         'mainapp_list': mainapp_list,
         'products_category': products_category,
         'selected_category_id': pk,
