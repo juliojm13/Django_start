@@ -20,18 +20,53 @@
 			<div class="links clearfix">
 				<ul class="links-menu">
 					{% for category in products_category%}
-
+					{%if category.is_active%}
 					<li><a href="{% url 'products:category' category.id %}" {%if selected_category_id == category.id %} class="active"{%endif%}>{{ category }}</a></li>
-
+					{%endif%}
 					{% endfor %}
 					<li><a href="{% url 'products:all' %}" {%if selected_category_id is None %} class="active"{%endif%}>Все</a></li>
 				</ul>
 			</div>
 			<div class="details-products">
 				{%if products_of_category%}
-                {%for product in products_of_category%}
+				<nav aria-label="Page navigation example">
+					<div class="title clearfix">
+						<div class="paginator">
+							{% if selected_category_id is None %}
+								{% if products_of_category.has_previous %}
+									<a href="{% url 'products:page_all'  products_of_category.previous_page_number %}">
+									  <
+									</a>
+								{% endif %}
+								  <span class="current">
+									страница {{ products_of_category.number }} из {{ products_of_category.paginator.num_pages }}
+								  </span>
+								{% if products_of_category.has_next %}
+									<a href="{% url 'products:page_all' products_of_category.next_page_number %}">
+									  >
+									</a>
+								{% endif %}
+							{%else%}
+								{% if products_of_category.has_previous %}
+									<a href="{% url 'products:page' selected_category_id products_of_category.previous_page_number %}">
+									  <
+									</a>
+								{% endif %}
+								  <span class="current">
+									страница {{ products_of_category.number }} из {{ products_of_category.paginator.num_pages }}
+								  </span>
+								{% if products_of_category.has_next %}
+									<a href="{% url 'products:page' selected_category_id products_of_category.next_page_number %}">
+									  >
+									</a>
+								{% endif %}
+							{%endif%}
+						</div>
+      				</div>
+				</nav>
+				{%for product in products_of_category%}
 				<div class="description">
-                    <img src="/media/{{ product.image }}" alt="{{ product.short_desc }}" style="width:470px;height:470px;">
+                    <img src="/media/{{ product.image|default:'products_images/default.png' }}" alt="{{ product.short_desc }}" style="width:470px;height:470px;">
 					<h3 class="big-bold">{{product.short_description}}</h3>
 					<p class="price">{{product.price}}<span>руб</span></p>
 					<a href="{% url 'cart:adding_product' product.id %}" class="red-button">
