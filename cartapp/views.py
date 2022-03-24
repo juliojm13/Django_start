@@ -9,8 +9,8 @@ from django.http import JsonResponse
 @login_required()
 def cart(request):
     cart = Cart.objects.filter(user=request.user)
-    context = {'cart': cart}
-    return render(request, 'cartapp/cart.html', context)
+    # context = {'cart': cart}
+    return render(request, 'cartapp/cart.html')
 
 
 @login_required()

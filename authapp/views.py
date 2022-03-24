@@ -1,8 +1,11 @@
 from django.shortcuts import render, HttpResponseRedirect
-from authapp.forms import ShopUserLoginForm,ShopUserRegisterForm
+from authapp.forms import ShopUserLoginForm, ShopUserRegisterForm
 from authapp.forms import ShopUserEditForm
 from django.contrib import auth
 from django.urls import reverse
+from django.core.mail import send_mail
+from django.conf import settings
+from .models import ShopUser
 
 
 def login(request):
@@ -23,7 +26,7 @@ def login(request):
 
                 return HttpResponseRedirect(reverse('index'))
 
-    content = {'title': title, 'login_form': login_form ,'next':next}
+    content = {'title': title, 'login_form': login_form, 'next': next}
     return render(request, 'authapp/login.html', content)
 
 
@@ -55,7 +58,9 @@ def register(request):
         register_form = ShopUserRegisterForm(request.POST)
 
         if register_form.is_valid():
-            register_form.save()
+            user = register_form.save()
+            if send_verify_mail(user):
+                return render(request, 'authapp/sent_email.html')
             return HttpResponseRedirect(reverse('auth:login'))
     else:
         register_form = ShopUserRegisterForm()
@@ -63,3 +68,30 @@ def register(request):
     content = {'title': title, 'register_form': register_form}
 
     return render(request, 'authapp/register.html', content)
+
+
+def send_verify_mail(user):
+    verify_link = reverse('auth:verify', args=[user.email, user.activation_key])
+    title = f'Подтверждение учетной записи {user.username}'
+    message = f'Для подтверждения учетной записи {user.username} на портал\
+    {settings.DOMAIN_NAME} перейдите по ссылке:\
+    \n{settings.DOMAIN_NAME}{verify_link}'
+    return send_mail(title, message, settings.EMAIL_HOST_USER, [user.email], fail_silently=False)
+
+
+def verify(request, email, activation_key):
+    try:
+        user = ShopUser.objects.get(email=email)
+        if user and user.activation_key == activation_key and not user.is_activation_key_expired:
+            user.activation_key = ''
+            user.activation_key_expires = None
+            user.is_active = True
+            user.save(update_fields=['activation_key', 'activation_key_expires', 'is_active'])
+            auth.login(request, user)
+            return render(request, 'authapp/verification.html')
+
+    except Exception as e:
+        pass
+
+    else:
+        return HttpResponseRedirect(reverse('index'))
