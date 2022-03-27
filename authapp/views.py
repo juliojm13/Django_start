@@ -1,11 +1,12 @@
 from django.shortcuts import render, HttpResponseRedirect
-from authapp.forms import ShopUserLoginForm, ShopUserRegisterForm
+from authapp.forms import ShopUserLoginForm, ShopUserRegisterForm,UserProfileEditForm
 from authapp.forms import ShopUserEditForm
 from django.contrib import auth
 from django.urls import reverse
 from django.core.mail import send_mail
 from django.conf import settings
 from .models import ShopUser
+from django.db import transaction
 
 
 def login(request):
@@ -17,9 +18,9 @@ def login(request):
         username = request.POST['username']
         password = request.POST['password']
 
-        user = auth.authenticate(username=username, password=password)
+        user = auth.authenticate(username=username, password=password, backend='django.contrib.auth.backends.ModelBackend')
         if user and user.is_active:
-            auth.login(request, user)
+            auth.login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             if 'next' in request.POST.keys():
                 return HttpResponseRedirect(request.POST['next'])
             else:
@@ -35,18 +36,21 @@ def logout(request):
     return HttpResponseRedirect(reverse('index'))
 
 
+@transaction.atomic()
 def edit(request):
     title = 'редактирование'
 
     if request.method == 'POST':
         edit_form = ShopUserEditForm(request.POST, request.FILES, instance=request.user)
-        if edit_form.is_valid():
+        profile_form = UserProfileEditForm(request.POST, instance=request.user.userprofile)
+        if edit_form.is_valid() and profile_form.is_valid():
             edit_form.save()
             return HttpResponseRedirect(reverse('index'))
     else:
         edit_form = ShopUserEditForm(instance=request.user)
+        profile_form = UserProfileEditForm(instance=request.user.userprofile)
 
-    content = {'title': title, 'edit_form': edit_form}
+    content = {'title': title, 'edit_form': edit_form,'profile_form':profile_form}
 
     return render(request, 'authapp/edit.html', content)
 
@@ -87,7 +91,7 @@ def verify(request, email, activation_key):
             user.activation_key_expires = None
             user.is_active = True
             user.save(update_fields=['activation_key', 'activation_key_expires', 'is_active'])
-            auth.login(request, user)
+            auth.login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             return render(request, 'authapp/verification.html')
 
     except Exception as e:

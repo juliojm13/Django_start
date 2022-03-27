@@ -28,6 +28,7 @@ urlpatterns = [
     # path('admin/', admin.site.urls),
     path('auth/', include('authapp.urls', namespace='auth')),
     path('cart/', include('cartapp.urls', namespace='cart')),
+    path('', include('social_django.urls', namespace = 'social')),  # OAUTH2 VK
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
