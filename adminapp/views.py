@@ -210,6 +210,7 @@ class ProductCategoryDeleteView(DeleteView):
     template_name = 'adminapp/category_delete.html'
     success_url = reverse_lazy('admin:categories')
     context_object_name = 'category_to_delete'
+    # import pdb;pdb.set_trace()
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()

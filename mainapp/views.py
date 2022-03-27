@@ -40,7 +40,7 @@ def index(request):
         'now_date': datetime.now(),
         'name': 'jarno',
         'products': products,
-        'cart': cart,
+        # 'cart': cart,
     })
 
 
@@ -54,7 +54,7 @@ def products(request):
         'mainapp_list': mainapp_list,
         'now_date': datetime.now(),
         'name': 'jarno',
-        'cart': cart,
+        # 'cart': cart,
         'hot_product': hot_product,
         'same_products': same_products
     })
@@ -66,7 +66,7 @@ def contact(request):
         'mainapp_list': mainapp_list,
         'now_date': datetime.now(),
         'name': 'jarno',
-        'cart': cart,
+        # 'cart': cart,
     })
 
 
@@ -92,5 +92,5 @@ def products_category(request, pk=None, page=1):
         'mainapp_list': mainapp_list,
         'products_category': products_category,
         'selected_category_id': pk,
-        'cart': cart,
+        # 'cart': cart,
     })

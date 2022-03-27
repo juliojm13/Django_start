@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     'mainapp',
     'authapp',
     'cartapp',
@@ -66,6 +67,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'mainapp.context_processors.cart',
             ],
         },
     },
@@ -141,3 +143,30 @@ AUTH_USER_MODEL = 'authapp.ShopUser'
 
 #for @login_required()
 LOGIN_URL = '/auth/login/'
+
+#For email
+
+DOMAIN_NAME = 'http://localhost:8000'
+
+# sending by gmail working code
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_USE_TLS = True
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'juliojm1310@gmail.com'   # works
+# EMAIL_HOST_PASSWORD = 'donthack!! ^_^'    # works
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# loging not sending
+EMAIL_HOST = 'localhost'  # URL to the mail server
+EMAIL_PORT = '25'  # Port of the server
+EMAIL_HOST_USER = 'admin@admin.com'  # name of the sender of the mail
+EMAIL_HOST_PASSWORD = 'geekshop'  # password of the user sender
+EMAIL_USE_SSL = True  # encryption
+# EMAIL_USE_TLS = True #if encryption TLS
+
+# variant python -m smtpd -n -c DebuggingServer localhost:25
+# EMAIL_HOST_USER, EMAIL_HOST_PASSWORD = None, None
+
+# to log the messages instead of sending (doing here)
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = 'tmp/email_messages/'

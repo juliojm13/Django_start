@@ -1,0 +1,9 @@
+{% extends 'authapp/base.html' %}
+{% load static %}
+
+{% block content %}
+        <h4>Письмо отправлен!.</h4>
+    <button class="btn btn-round form-control">
+    <a href="{% url 'index' %}" class="">на главную</a>
+    </button>
+{% endblock %}

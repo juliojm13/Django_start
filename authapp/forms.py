@@ -1,7 +1,8 @@
-from django.contrib.auth.forms import AuthenticationForm,UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from .models import ShopUser
 from django.contrib.auth.forms import UserChangeForm
 from django.forms import forms, HiddenInput
+import random, hashlib
 
 
 class ShopUserLoginForm(AuthenticationForm):
@@ -39,6 +40,15 @@ class ShopUserRegisterForm(UserCreationForm):
             raise forms.ValidationError("В этом городе не работаем!")
 
         return data
+
+    def save(self, commit=True):
+        user = super(ShopUserRegisterForm, self).save()
+
+        user.is_active = False
+        salt = hashlib.sha1(str(random.random()).encode('utf-8')).hexdigest()[:6]
+        user.activation_key = hashlib.sha1((user.email + salt).encode('utf-8')).hexdigest()
+        user.save()
+        return user
 
 
 class ShopUserEditForm(UserChangeForm):
