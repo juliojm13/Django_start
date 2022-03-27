@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from .models import ShopUser
+from .models import ShopUser, UserProfile
 from django.contrib.auth.forms import UserChangeForm
-from django.forms import forms, HiddenInput
+from django.forms import forms, HiddenInput, ModelForm
 import random, hashlib
 
 
@@ -77,3 +77,9 @@ class ShopUserEditForm(UserChangeForm):
             raise forms.ValidationError("В этом городе не работаем!")
 
         return data
+
+
+class UserProfileEditForm(ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ('about', 'gender')

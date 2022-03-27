@@ -21,6 +21,10 @@ def media_folder_users(string):
     Автоматически добавляет относительный URL-путь к медиафайлам пользователей
     users_avatars/user1.jpg --> /media/users_avatars/user1.jpg
     """
+    # import pdb;pdb.set_trace()
+    # if string.url.startswith('https'):  # Doesn't work. I wanted to delete the /media so I can show the vk picture/
+    #     return f'{string}'              # also affect to the admin site!!! Didnt have time to fix :(
+
     if not string:
         string = 'users_avatars/default.png'
 
@@ -28,3 +32,4 @@ def media_folder_users(string):
 
 
 register.filter('media_folder_products', media_folder_products)
+

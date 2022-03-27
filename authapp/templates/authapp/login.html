@@ -13,11 +13,14 @@
         <input class="form-control" type="submit" value="войти">
     </form>
     <br>
+    <a class="btn btn-block btn-social btn-vk" href="{% url 'social:begin' 'vk-oauth2' %}?next='/'">
+        <span class="fa fa-vk"></span> Sign in with VK
+    </a>
     <button class="btn btn-round form-control">
         <a href="{% url 'auth:register' %}" class="">
             зарегистрироваться
         </a>
-        <a href="{% url 'mainapp:index' %}" class="">
+        <a href="{% url 'index' %}" class="">
             На главную
         </a>
     </button>
