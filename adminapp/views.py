@@ -119,19 +119,18 @@ def user_delete(request, pk):
     return render(request, 'adminapp/user_delete.html', content)
 
 
-@user_passes_test(user_check)
-def categories(request, page=1):
-    title = 'админка/категории'
+class CategoriesListView(ListView):
+    model = ProductCategory
+    template_name = 'adminapp/categories.html'
+    context_object_name = 'objects'
+    paginate_by = 3
 
-    categories_list = ProductCategory.objects.all().order_by('-is_active')
-    categories_paginator = Paginator(categories_list, 3)
-    content = {
-        'title': title,
-        'objects': categories_paginator.page(page)
-    }
+    def get_queryset(self):
+        return  ProductCategory.objects.all().order_by('-is_active')
 
-    return render(request, 'adminapp/categories.html', content)
-
+    @method_decorator(user_passes_test(lambda u: u.is_superuser))
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
 
 # FBV to create category
 # @user_passes_test(user_check)
@@ -292,6 +291,7 @@ def product_update(request, pk):
                }
 
     return render(request, 'adminapp/product_update.html', content)
+#     product = get_object_or_404(Product, pk=pk)
 
 
 @user_passes_test(user_check)

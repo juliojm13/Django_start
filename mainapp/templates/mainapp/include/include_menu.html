@@ -14,11 +14,24 @@
 
 {% endfor %}
 {% if user.is_authenticated %}
-<li>
-    <a href="{% url 'auth:edit' %}">
+    <div class="dropdown" style="display: inline-block">
+        <span class="btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
         {{ user.first_name|default:'Пользователь' }}
-    </a>
-</li>
+            <span class="caret"></span>
+        </span>
+        <ul class="dropdown-menu">
+        <li>
+            <a href="{% url 'auth:edit' %}">
+                Профиль {{ user.first_name|default:'Пользователь' }}
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'ordersapp:orders_list' %}">
+                заказы
+            </a>
+        </li>
+        </ul>
+    </div>
 {% endif %}
 <li>
     {% if user.is_authenticated %}

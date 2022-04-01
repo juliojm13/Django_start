@@ -13,8 +13,8 @@ urlpatterns = [
 
 
     path('categories/create/', adminapp.ProductCategoryCreateView.as_view(), name='category_create'),
-    path('categories/read/', adminapp.categories, name='categories'),
-    path('categories/read/<int:page>/', adminapp.categories, name='categories_page'),
+    path('categories/read/', adminapp.CategoriesListView.as_view(), name='categories'),
+    path('categories/read/<int:page>/', adminapp.CategoriesListView.as_view(), name='categories_page'),
     path('categories/update/<int:pk>/', adminapp.ProductCategoryUpdateView.as_view(), name='category_update'),
     path('categories/delete/<int:pk>/', adminapp.ProductCategoryDeleteView.as_view(), name='category_delete'),
 
