@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from mainapp.models import Product
+from django.db import transaction
 
 
 class Order(models.Model):
@@ -39,14 +40,36 @@ class Order(models.Model):
         return sum(list(map(lambda x: x.quantity, items)))
 
     def delete(self, using=None, keep_parents=False):
+        # import pdb;pdb.set_trace()
         for item in self.items.select_related():
             item.product.quantity += item.quantity  # giving back to the storage after canceling the order
-            item.save()
+            item.product.save()
         self.is_active = False
         self.save()
+        super(Order, self).delete()
+
+
+class OrderItemQuerySet(models.QuerySet):
+    def save(self, *args, **kwargs):
+        # import pdb;pdb.set_trace()
+        with transaction.atomic():
+            if self.pk:
+                self.product.quantity -= self.quantity - self.__class__.get_item(self.pk).quantity
+            else:
+                self.product.quantity -= self.quantity
+            self.product.save()
+            super(OrderItemQuerySet, self).save(*args, **kwargs)
+
+    @transaction.atomic
+    def delete(self, *args, **kwargs):
+
+        self.product.quantity += self.quantity
+        self.product.save()
+        super(OrderItemQuerySet, self).delete(*args, **kwargs)
 
 
 class OrderItem(models.Model):
+    objects = OrderItemQuerySet.as_manager()
     order = models.ForeignKey(Order, verbose_name='заказ', related_name='items', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, verbose_name='Продукт', on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(verbose_name='количество', default=0)

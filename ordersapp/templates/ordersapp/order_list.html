@@ -32,14 +32,14 @@
             </a>
         </td>
         <td>
-            {% if item.status == 'FM' %}
+            {% if item.status == item.FORMING %}
             <a href="{% url 'ordersapp:order_update' item.pk %}">
                 редактировать
             </a>
             {% endif %}
         </td>
         <td>
-            {% if item.status == 'FM' %}
+            {% if item.status == item.FORMING %}
             <a href="{% url 'ordersapp:order_delete' item.pk %}">
                 удалить
             </a>

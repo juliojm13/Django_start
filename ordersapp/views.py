@@ -104,7 +104,9 @@ class OrderUpdateView(TitleContextMixin,UpdateView):
 
         else:
             formset = OrderFormSet(instance=self.object)
-
+            for form in formset.forms:
+                if form.instance.pk:
+                    form.initial['price'] = form.instance.product.price
         context.update(
             orderitems=formset
         )
