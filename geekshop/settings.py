@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-9mnfl2hh@a#5dk+(%b3q+d^jxc!&nlz1f!*^u+ml*jfk8l28wx'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -73,8 +73,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'mainapp.context_processors.cart',
-                'social_django.context_processors.backends',    # social auth+
-                'social_django.context_processors.login_redirect',   # social auth+
+                'social_django.context_processors.backends',  # social auth+
+                'social_django.context_processors.login_redirect',  # social auth+
 
             ],
         },
@@ -87,9 +87,15 @@ WSGI_APPLICATION = 'geekshop.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
+
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': 'geekshop',
+        'ENGINE': 'django.bd.backends.postgresql',
+        'USER': 'postgres',
     }
 }
 
@@ -183,7 +189,7 @@ SOCIAL_AUTH_VK_OAUTH2_IGNORE_DEFAULT_SCOPE = True
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email', 'age']
 
 LOGIN_REDIRECT_URL = '/'
-LOGIN_ERROR_URL = '/'   # social auth +
+LOGIN_ERROR_URL = '/'  # social auth +
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',

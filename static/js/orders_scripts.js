@@ -25,6 +25,7 @@ window.onload = function(){
             orderitem_quantity = parseInt($(this).val());
             delta_quantity = orderitem_quantity - quantity_arr[orderitem_num];
             quantity_arr[orderitem_num] = orderitem_quantity;
+            console.log(orderitem_quantity,delta_quantity,quantity_arr[orderitem_num])
             orderSummaryUpdate(price_arr[orderitem_num],delta_quantity);
         }
     })
@@ -61,6 +62,6 @@ window.onload = function(){
         orderitem_num = parseInt(target_name.replace('items-', '').replace('-quantity', ''));
         delta_quantity = -quantity_arr[orderitem_num];
         orderSummaryUpdate(price_arr[orderitem_num], delta_quantity);
-}
+zz}
 
 }
