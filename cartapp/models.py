@@ -21,14 +21,14 @@ class Cart(models.Model):
     @property
     def total_quantity(self):
         "return the total quantity of products on cart"
-        _user_cart = Cart.objects.filter(user=self.user)
+        _user_cart = Cart.objects.filter(user=self.user).select_related()
         _total_quantity = sum(item.quantity for item in _user_cart)
         return _total_quantity
 
     @property
     def total_cost(self):
         "return the total cost of products on cart"
-        _user_cart = Cart.objects.filter(user=self.user)
+        _user_cart = Cart.objects.filter(user=self.user).select_related()
         _total_cost = sum(item.product.price * item.quantity for item in _user_cart)
         return _total_cost
 

@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
 from mainapp import views as mainapp_views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -28,8 +28,13 @@ urlpatterns = [
     # path('admin/', admin.site.urls),
     path('auth/', include('authapp.urls', namespace='auth')),
     path('cart/', include('cartapp.urls', namespace='cart')),
-    path('', include('social_django.urls', namespace = 'social')),  # OAUTH2 VK
+    path('', include('social_django.urls', namespace='social')),  # OAUTH2 VK
     path('orders/', include('ordersapp.urls', namespace='orders')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+    import debug_toolbar
+
+    urlpatterns += [re_path(r'^__debug__/', include(debug_toolbar.urls))]
+

@@ -103,7 +103,8 @@ class OrderUpdateView(TitleContextMixin,UpdateView):
             formset = OrderFormSet(self.request.POST, instance=self.object)
 
         else:
-            formset = OrderFormSet(instance=self.object)
+            queryset = self.object.items.select_related()
+            formset = OrderFormSet(instance=self.object, queryset = queryset)
             for form in formset.forms:
                 if form.instance.pk:
                     form.initial['price'] = form.instance.product.price
