@@ -34,7 +34,7 @@ def get_same_products(hot_product):
 
 def index(request):
     cart = get_cart(request.user)
-    products = Product.objects.all()[:4]
+    products = Product.objects.filter(is_active=True,category__is_active=True).select_related('category')[:4]
     return render(request, 'mainapp/index.html', context={
         'mainapp_list': mainapp_list,
         'now_date': datetime.now(),
