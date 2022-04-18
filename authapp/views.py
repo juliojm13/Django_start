@@ -7,8 +7,10 @@ from django.core.mail import send_mail
 from django.conf import settings
 from .models import ShopUser
 from django.db import transaction
+from django.views.decorators.cache import cache_page
 
 
+@cache_page(2500)
 def login(request):
     title = 'вход'
     next = request.GET['next'] if 'next' in request.GET.keys() else ''

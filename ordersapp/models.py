@@ -39,6 +39,14 @@ class Order(models.Model):
         items = self.items.select_related()
         return sum(list(map(lambda x: x.quantity, items)))
 
+    @property
+    def summary(self):
+        items = self.items.select_related()
+        return {
+            'total_cost': sum(list(map(lambda x: x.cost, items))),
+            'total_quantity': sum(list(map(lambda x: x.quantity, items))),
+        }
+
     def delete(self, using=None, keep_parents=False):
         # import pdb;pdb.set_trace()
         for item in self.items.select_related():
