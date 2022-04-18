@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from mainapp.models import Product
 from django.db import transaction
+from django.utils.functional import cached_property
 
 
 class Cart(models.Model):
@@ -18,17 +19,22 @@ class Cart(models.Model):
         "return the total cost of the same product"
         return self.product.price * self.quantity
 
+    @cached_property
+    def cart_items(self):
+        return Cart.objects.filter(user=self.user).select_related('product')
+
+
     @property
     def total_quantity(self):
         "return the total quantity of products on cart"
-        _user_cart = Cart.objects.filter(user=self.user).select_related()
+        _user_cart = self.cart_items
         _total_quantity = sum(item.quantity for item in _user_cart)
         return _total_quantity
 
     @property
     def total_cost(self):
         "return the total cost of products on cart"
-        _user_cart = Cart.objects.filter(user=self.user).select_related()
+        _user_cart = self.cart_items
         _total_cost = sum(item.product.price * item.quantity for item in _user_cart)
         return _total_cost
 
