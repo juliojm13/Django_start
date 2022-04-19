@@ -1,7 +1,7 @@
 from authapp.models import ShopUser
 from authapp.forms import ShopUserEditForm
 from mainapp.models import ProductCategory
-from django.forms import ModelForm
+from django.forms import ModelForm,IntegerField
 from mainapp.models import Product
 
 
@@ -12,9 +12,12 @@ class ShopUserAdminEditForm(ShopUserEditForm):
 
 
 class ProductCategoryEditForm(ModelForm):
+    discount = IntegerField(label='скидка',required=False,min_value=0,max_value=90,initial=0)
+
     class Meta:
         model = ProductCategory
-        fields = '__all__'
+        # fields = '__all__'
+        exclude = ()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

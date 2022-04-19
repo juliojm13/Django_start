@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-9mnfl2hh@a#5dk+(%b3q+d^jxc!&nlz1f!*^u+ml*jfk8l28wx'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -42,6 +42,8 @@ INSTALLED_APPS = [
 
     'debug_toolbar',
     'template_profiler_panel',
+
+    # 'django_cleanup.apps.CleanupConfig',
 
     'mainapp',
     'authapp',

@@ -58,7 +58,7 @@ def products(request):
         'name': 'jarno',
         # 'cart': cart,
         'hot_product': hot_product,
-        'same_products': same_products
+        'same_products': same_products,
     })
 
 

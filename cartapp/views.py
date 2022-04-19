@@ -4,6 +4,7 @@ from mainapp.models import Product, ProductCategory
 from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
 from django.http import JsonResponse
+from django.db.models import F
 
 
 @login_required()
@@ -23,7 +24,7 @@ def add_to_cart(request, pk):
     if not cart_product:
         cart_product = Cart(user=request.user, product=product)
 
-    cart_product.quantity += 1
+    cart_product.quantity = F('quantity') + 1
     cart_product.save()
 
     return HttpResponseRedirect(reverse('cart:adding_product', args=[pk]))
