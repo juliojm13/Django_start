@@ -14,6 +14,90 @@ with open('context.json', 'r', encoding='utf-8') as f:
 mainapp_list = contex_json['mainapp_list']
 
 
+def get_links_menu():
+    if settings.LOW_CACHE:
+        key = 'links_menu'
+        links_menu = cache.get(key)
+        if links_menu is None:
+            links_menu = ProductCategory.objects.filter(is_active=True)
+            cache.set(key, links_menu)
+            return links_menu
+        else:
+            return ProductCategory.objects.filter(is_active=True)
+
+def get_categories():
+    if settings.LOW_CACHE:
+        key = f'categories'
+        categories = cache.get(key)
+        if categories is None:
+            categories = ProductCategory.objects.all().filter(is_active=True)
+            cache.set(key, categories)
+            return categories
+        else:
+            return ProductCategory.objects.all().filter(is_active=True)
+
+
+def get_category(pk):
+    if settings.LOW_CACHE:
+        key = f'category_{pk}'
+        category = cache.get(key)
+        if category is None:
+            category = get_object_or_404(ProductCategory, pk=pk)
+            cache.set(key, category)
+            return category
+        else:
+            return get_object_or_404(ProductCategory, pk=pk)
+
+
+def get_products():
+    if settings.LOW_CACHE:
+        key = 'products'
+        products = cache.get(key)
+        if products is None:
+            products = Product.objects.filter(is_active=True, category__is_active=True).select_related('category')
+            cache.set(key, products)
+            return products
+        else:
+            return Product.objects.filter(is_active=True, category__is_active=True).select_related('category')
+
+
+def get_product(pk):
+    if settings.LOW_CACHE:
+        key = f'product_{pk}'
+        product = cache.get(key)
+        if product is None:
+            product = get_object_or_404(Product, pk=pk)
+            cache.set(key, product)
+            return product
+        else:
+            return get_object_or_404(Product, pk=pk)
+
+
+def get_products_orederd_by_price():
+    if settings.LOW_CACHE:
+        key = 'products_orederd_by_price'
+        products = cache.get(key)
+        if products is None:
+            products = Product.objects.filter(is_active=True, category__is_active=True).order_by('price')
+            cache.set(key, products)
+            return products
+        else:
+            return Product.objects.filter(is_active=True, category__is_active=True).order_by('price')
+
+
+def get_products_in_category_orederd_by_price(pk):
+    if settings.LOW_CACHE:
+        key = f'products_in_category_orederd_by_price_{pk}'
+        products = cache.get(key)
+        if products is None:
+            products = Product.objects.filter(category__pk=pk, is_active=True, category__is_active=True).order_by(
+                'price')
+            cache.set(key, products)
+            return products
+        else:
+            return Product.objects.filter(category__pk=pk, is_active=True, category__is_active=True).order_by('price')
+
+
 def get_cart(user):
     if user.is_authenticated:
         return user.cart.all()
@@ -22,7 +106,7 @@ def get_cart(user):
 
 
 def get_hot_product():
-    products = Product.objects.all().filter(is_active=True)
+    products = get_products()
 
     return random.choice(products)
 
@@ -36,7 +120,7 @@ def get_same_products(hot_product):
 
 def index(request):
     cart = get_cart(request.user)
-    products = Product.objects.filter(is_active=True, category__is_active=True).select_related('category')[:4]
+    products = get_products()[:4]
     return render(request, 'mainapp/index.html', context={
         'mainapp_list': mainapp_list,
         'now_date': datetime.now(),
@@ -47,7 +131,7 @@ def index(request):
 
 
 def products(request):
-    products_category = ProductCategory.objects.all().filter(is_active=True)
+    products_category = get_categories()
     cart = get_cart(request.user)
     hot_product = get_hot_product()
     same_products = get_same_products(hot_product)
@@ -73,16 +157,13 @@ def contact(request):
 
 
 def products_category(request, pk=None, page=1):
-    # import pdb; pdb.set_trace()
-    products_category = ProductCategory.objects.all()
-    cart = get_cart(request.user)
+    products_category = get_categories()
     if pk is None:
-        products_of_category = Product.objects.all().filter(is_active=True)
+        products_of_category = get_products()
     else:
-        products_of_category = Product.objects.filter(category_id=pk, is_active=True)
+        products_of_category = get_products_in_category_orederd_by_price(pk)
 
     paginator = Paginator(products_of_category, 2)
-    # import pdb;pdb.set_trace()
     try:
         products_paginator = paginator.page(page)
     except PageNotAnInteger:

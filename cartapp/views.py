@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.db.models import F
+from mainapp.views import get_product
 
 
 @login_required()
@@ -44,7 +45,7 @@ def adding_product(request, pk):
                     {"view_name": "products:index", "link_name": "Продукты"},
                     {"view_name": "contact", "link_name": "Контакты"}]
     cart = Cart.objects.filter(user=request.user)
-    selected_product = get_object_or_404(Product, pk=pk)
+    selected_product = get_product(pk)
     products_category = ProductCategory.objects.all()
     context = {'selected_product': selected_product,
                'products_category': products_category,
